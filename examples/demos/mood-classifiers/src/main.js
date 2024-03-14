@@ -9,7 +9,7 @@ let essentia = null;
 let essentiaAnalysis;
 let featureExtractionWorker = null;
 let inferenceWorkers = {};
-const modelNames = ['mood_happy' , 'mood_sad', 'mood_relaxed', 'mood_aggressive', 'danceability'];
+const modelNames = ['mood_happy' , 'mood_sad', 'mood_relaxed', 'mood_aggressive', 'danceability', 'gender', 'genre_dortmund', 'genre_rosamerica', 'mood_acoustic', 'mood_party', 'tonal_atonal', 'voice_instrumental'];
 let inferenceResultPromises = [];
 
 const resultsViz = new AnalysisResults(modelNames);
@@ -132,18 +132,18 @@ function createInferenceWorkers() {
 }
 
 function collectPredictions() {
-    if (inferenceResultPromises.length == modelNames.length) {
-        Promise.all(inferenceResultPromises).then((predictions) => {
-            const allPredictions = {};
-            Object.assign(allPredictions, ...predictions);
-            resultsViz.updateMeters(allPredictions);
-            resultsViz.updateValueBoxes(essentiaAnalysis);
+    // if (inferenceResultPromises.length == modelNames.length) {
+        // Promise.all(inferenceResultPromises).then((predictions) => {
+            // const allPredictions = {};
+            // Object.assign(allPredictions, ...predictions);
+            // resultsViz.updateMeters(allPredictions);
+            // resultsViz.updateValueBoxes(essentiaAnalysis);
             toggleLoader();
             controls.toggleEnabled(true)
 
             inferenceResultPromises = [] // clear array
-        })
-    }
+        // })
+    // }
 }
 
 function toggleLoader() {

@@ -11,7 +11,14 @@ const modelTagOrder = {
     'mood_sad': [false, true],
     'mood_relaxed': [false, true],
     'mood_aggressive': [true, false],
-    'danceability': [true, false]
+    'danceability': [true, false],
+    'gender': ["female", "male"],
+    'genre_dortmund': ["alternative", "blues", "electronic", "folkcountr", "funksoulrnb", "jazz", "pop", "raphiphop", "rock"],
+    'genre_rosamerica': ["cla", "dan", "hip", "jaz", "pop", "rhy", "roc", "spe"],
+    'mood_acoustic': ["acoustic", "non_acoustic"],
+    'mood_party': ["non_party", "party"],
+    'tonal_atonal': ["tonal", "atonal"],
+    'voice_instrumental': ["instrumental", "voice"]
 };
 
 function initModel() {
@@ -91,20 +98,189 @@ function twoValuesAverage (arrayOfArrays) {
     return [firstValuesAvg, secondValuesAvg];
 }
 
+function genreDortmundValuesAverage (arrayOfArrays) {
+    let values0 = [];
+    let values1 = [];
+    let values2 = [];
+    let values3 = [];
+    let values4 = [];
+    let values5 = [];
+    let values6 = [];
+    let values7 = [];
+    let values8 = [];
+
+    arrayOfArrays.forEach((v) => {
+        values0.push(v[0]);
+        values1.push(v[1]);
+        values2.push(v[2]);
+        values3.push(v[3]);
+        values4.push(v[4]);
+        values5.push(v[5]);
+        values6.push(v[6]);
+        values7.push(v[7]);
+        values8.push(v[8]);
+    });
+
+    const values0Avg = values0.reduce((acc, val) => acc + val) / values0.length;
+    const values1Avg = values1.reduce((acc, val) => acc + val) / values1.length;
+    const values2Avg = values2.reduce((acc, val) => acc + val) / values2.length;
+    const values3Avg = values3.reduce((acc, val) => acc + val) / values3.length;
+    const values4Avg = values4.reduce((acc, val) => acc + val) / values4.length;
+    const values5Avg = values5.reduce((acc, val) => acc + val) / values5.length;
+    const values6Avg = values6.reduce((acc, val) => acc + val) / values6.length;
+    const values7Avg = values7.reduce((acc, val) => acc + val) / values7.length;
+    const values8Avg = values8.reduce((acc, val) => acc + val) / values8.length;
+
+    console.info(`** Genre Dortmund predictions:
+alternative: ${values0Avg}
+blues: ${values1Avg}
+electronic: ${values2Avg}
+folkcountr: ${values3Avg}
+funksoulrnb: ${values4Avg}
+jazz: ${values5Avg}
+pop: ${values6Avg}
+raphiphop: ${values7Avg}
+rock: ${values8Avg}`);
+
+}
+
+function genreRosamericaValuesAverage (arrayOfArrays) {
+    let values0 = [];
+    let values1 = [];
+    let values2 = [];
+    let values3 = [];
+    let values4 = [];
+    let values5 = [];
+    let values6 = [];
+    let values7 = [];
+
+    arrayOfArrays.forEach((v) => {
+        values0.push(v[0]);
+        values1.push(v[1]);
+        values2.push(v[2]);
+        values3.push(v[3]);
+        values4.push(v[4]);
+        values5.push(v[5]);
+        values6.push(v[6]);
+        values7.push(v[7]);
+    });
+
+    const values0Avg = values0.reduce((acc, val) => acc + val) / values0.length;
+    const values1Avg = values1.reduce((acc, val) => acc + val) / values1.length;
+    const values2Avg = values2.reduce((acc, val) => acc + val) / values2.length;
+    const values3Avg = values3.reduce((acc, val) => acc + val) / values3.length;
+    const values4Avg = values4.reduce((acc, val) => acc + val) / values4.length;
+    const values5Avg = values5.reduce((acc, val) => acc + val) / values5.length;
+    const values6Avg = values6.reduce((acc, val) => acc + val) / values6.length;
+    const values7Avg = values7.reduce((acc, val) => acc + val) / values7.length;
+
+    console.info(`** Genre Rosamerica predictions:
+classic: ${values0Avg}
+dance: ${values1Avg}
+hip hop: ${values2Avg}
+jazz: ${values3Avg}
+pop: ${values4Avg}
+rhythm and blues: ${values5Avg}
+rock: ${values6Avg}
+speech: ${values7Avg}`);
+
+}
+
 function modelPredict(features) {
     if (modelReady) {
         const inferenceStart = Date.now();
 
-        model.predict(features, true).then((predictions) => {
-            const summarizedPredictions = twoValuesAverage(predictions);
-            // format predictions, grab only positive one
-            const results = summarizedPredictions.filter((_, i) => modelTagOrder[modelName][i])[0];
+        if ( modelName === "mood_happy" || modelName === "mood_sad" || modelName === "mood_relaxed" || modelName === "mood_aggressive" || modelName === "danceability" ) {
 
-            console.info(`${modelName}: Inference took: ${Date.now() - inferenceStart}`);
-            // output to main thread
-            outputPredictions(results);
-            model.dispose();
-        });
+            model.predict(features, true).then((predictions) => {
+                const summarizedPredictions = twoValuesAverage(predictions);
+                // format predictions, grab only positive one
+                const results = summarizedPredictions.filter((_, i) => modelTagOrder[modelName][i])[0];
+
+                console.info(`${modelName}: Inference took: ${Date.now() - inferenceStart}`);
+                // output to main thread
+                outputPredictions(results);
+                model.dispose();
+            });
+        }
+        
+        if (modelName === "gender") {
+            
+            model.predict(features, true).then((predictions) => {
+                const summarizedPredictions = twoValuesAverage(predictions);
+                
+                const results = `** ${modelName} predictions: female:${summarizedPredictions[0]}, male:${summarizedPredictions[1]}`;
+                console.info(results);
+
+                model.dispose();
+            });
+        }
+        
+        if (modelName === "genre_dortmund") {
+            
+            model.predict(features, true).then((predictions) => {
+                genreDortmundValuesAverage(predictions);
+
+                model.dispose();
+            });
+        }
+        
+        if (modelName === "genre_rosamerica") {
+            
+            model.predict(features, true).then((predictions) => {
+                genreRosamericaValuesAverage(predictions);
+
+                model.dispose();
+            });
+        }
+        
+        if (modelName === "mood_acoustic") {
+            
+            model.predict(features, true).then((predictions) => {
+                const summarizedPredictions = twoValuesAverage(predictions);
+                
+                const results = `** ${modelName} predictions: acoustic:${summarizedPredictions[0]}, non_acoustic:${summarizedPredictions[1]}`;
+                console.info(results);
+
+                model.dispose();
+            });
+        }
+        
+        if (modelName === "mood_party") {
+            
+            model.predict(features, true).then((predictions) => {
+                const summarizedPredictions = twoValuesAverage(predictions);
+                
+                const results = `** ${modelName} predictions: non party:${summarizedPredictions[0]}, party:${summarizedPredictions[1]}`;
+                console.info(results);
+
+                model.dispose();
+            });
+        }        
+        
+        if (modelName === "tonal_atonal") {
+            
+            model.predict(features, true).then((predictions) => {
+                const summarizedPredictions = twoValuesAverage(predictions);
+                
+                const results = `** ${modelName} predictions: tonal:${summarizedPredictions[0]}, atonal:${summarizedPredictions[1]}`;
+                console.info(results);
+
+                model.dispose();
+            });
+        }
+        
+        if (modelName === "voice_instrumental") {
+            
+            model.predict(features, true).then((predictions) => {
+                const summarizedPredictions = twoValuesAverage(predictions);
+                
+                const results = `** ${modelName} predictions: instrumental:${summarizedPredictions[0]}, voice:${summarizedPredictions[1]}`;
+                console.info(results);
+
+                model.dispose();
+            });
+        }
     }
 }
 
