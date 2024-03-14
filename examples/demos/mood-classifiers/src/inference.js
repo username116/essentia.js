@@ -15,6 +15,7 @@ const modelTagOrder = {
     'gender': ["female", "male"],
     'genre_dortmund': ["alternative", "blues", "electronic", "folkcountr", "funksoulrnb", "jazz", "pop", "raphiphop", "rock"],
     'genre_rosamerica': ["cla", "dan", "hip", "jaz", "pop", "rhy", "roc", "spe"],
+    'genre_tzanetakis': ["blu", "cla", "cou", "dis", "hip", "jaz", "met", "pop", "reg", "roc"],
     'mood_acoustic': ["acoustic", "non_acoustic"],
     'mood_party': ["non_party", "party"],
     'tonal_atonal': ["tonal", "atonal"],
@@ -131,7 +132,7 @@ function genreDortmundValuesAverage (arrayOfArrays) {
     const values7Avg = values7.reduce((acc, val) => acc + val) / values7.length;
     const values8Avg = values8.reduce((acc, val) => acc + val) / values8.length;
 
-    console.info(`** Genre Dortmund predictions:
+    console.info(`* Genre Dortmund predictions:
 alternative: ${values0Avg}
 blues: ${values1Avg}
 electronic: ${values2Avg}
@@ -174,7 +175,7 @@ function genreRosamericaValuesAverage (arrayOfArrays) {
     const values6Avg = values6.reduce((acc, val) => acc + val) / values6.length;
     const values7Avg = values7.reduce((acc, val) => acc + val) / values7.length;
 
-    console.info(`** Genre Rosamerica predictions:
+    console.info(`* Genre Rosamerica predictions:
 classic: ${values0Avg}
 dance: ${values1Avg}
 hip hop: ${values2Avg}
@@ -183,6 +184,56 @@ pop: ${values4Avg}
 rhythm and blues: ${values5Avg}
 rock: ${values6Avg}
 speech: ${values7Avg}`);
+
+}
+
+function genreTzanetakisValuesAverage (arrayOfArrays) {
+    let values0 = [];
+    let values1 = [];
+    let values2 = [];
+    let values3 = [];
+    let values4 = [];
+    let values5 = [];
+    let values6 = [];
+    let values7 = [];
+    let values8 = [];
+    let values9 = [];
+
+    arrayOfArrays.forEach((v) => {
+        values0.push(v[0]);
+        values1.push(v[1]);
+        values2.push(v[2]);
+        values3.push(v[3]);
+        values4.push(v[4]);
+        values5.push(v[5]);
+        values6.push(v[6]);
+        values7.push(v[7]);
+        values8.push(v[8]);
+        values9.push(v[9]);
+    });
+
+    const values0Avg = values0.reduce((acc, val) => acc + val) / values0.length;
+    const values1Avg = values1.reduce((acc, val) => acc + val) / values1.length;
+    const values2Avg = values2.reduce((acc, val) => acc + val) / values2.length;
+    const values3Avg = values3.reduce((acc, val) => acc + val) / values3.length;
+    const values4Avg = values4.reduce((acc, val) => acc + val) / values4.length;
+    const values5Avg = values5.reduce((acc, val) => acc + val) / values5.length;
+    const values6Avg = values6.reduce((acc, val) => acc + val) / values6.length;
+    const values7Avg = values7.reduce((acc, val) => acc + val) / values7.length;
+    const values8Avg = values8.reduce((acc, val) => acc + val) / values8.length;
+    const values9Avg = values9.reduce((acc, val) => acc + val) / values9.length;
+
+    console.info(`* Genre Tzanetakis predictions:
+blues: ${values0Avg}
+classic: ${values1Avg}
+country: ${values2Avg}
+disco: ${values3Avg}
+hip hop: ${values4Avg}
+jazz: ${values5Avg}
+metal: ${values6Avg}
+pop: ${values7Avg}
+reggae: ${values8Avg}
+rock: ${values9Avg}`);
 
 }
 
@@ -209,7 +260,7 @@ function modelPredict(features) {
             model.predict(features, true).then((predictions) => {
                 const summarizedPredictions = twoValuesAverage(predictions);
                 
-                const results = `** ${modelName} predictions: female:${summarizedPredictions[0]}, male:${summarizedPredictions[1]}`;
+                const results = `* ${modelName} predictions: female:${summarizedPredictions[0]}, male:${summarizedPredictions[1]}`;
                 console.info(results);
 
                 model.dispose();
@@ -234,12 +285,21 @@ function modelPredict(features) {
             });
         }
         
+        if (modelName === "genre_tzanetakis") {
+            
+            model.predict(features, true).then((predictions) => {
+                genreTzanetakisValuesAverage(predictions);
+
+                model.dispose();
+            });
+        }
+        
         if (modelName === "mood_acoustic") {
             
             model.predict(features, true).then((predictions) => {
                 const summarizedPredictions = twoValuesAverage(predictions);
                 
-                const results = `** ${modelName} predictions: acoustic:${summarizedPredictions[0]}, non_acoustic:${summarizedPredictions[1]}`;
+                const results = `* ${modelName} predictions: acoustic:${summarizedPredictions[0]}, non_acoustic:${summarizedPredictions[1]}`;
                 console.info(results);
 
                 model.dispose();
@@ -251,7 +311,7 @@ function modelPredict(features) {
             model.predict(features, true).then((predictions) => {
                 const summarizedPredictions = twoValuesAverage(predictions);
                 
-                const results = `** ${modelName} predictions: non party:${summarizedPredictions[0]}, party:${summarizedPredictions[1]}`;
+                const results = `* ${modelName} predictions: non party:${summarizedPredictions[0]}, party:${summarizedPredictions[1]}`;
                 console.info(results);
 
                 model.dispose();
@@ -263,7 +323,7 @@ function modelPredict(features) {
             model.predict(features, true).then((predictions) => {
                 const summarizedPredictions = twoValuesAverage(predictions);
                 
-                const results = `** ${modelName} predictions: tonal:${summarizedPredictions[0]}, atonal:${summarizedPredictions[1]}`;
+                const results = `* ${modelName} predictions: tonal:${summarizedPredictions[0]}, atonal:${summarizedPredictions[1]}`;
                 console.info(results);
 
                 model.dispose();
@@ -275,7 +335,7 @@ function modelPredict(features) {
             model.predict(features, true).then((predictions) => {
                 const summarizedPredictions = twoValuesAverage(predictions);
                 
-                const results = `** ${modelName} predictions: instrumental:${summarizedPredictions[0]}, voice:${summarizedPredictions[1]}`;
+                const results = `* ${modelName} predictions: instrumental:${summarizedPredictions[0]}, voice:${summarizedPredictions[1]}`;
                 console.info(results);
 
                 model.dispose();
