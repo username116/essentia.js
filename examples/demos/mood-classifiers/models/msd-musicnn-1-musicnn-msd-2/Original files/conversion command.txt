@@ -1,0 +1,6 @@
+tensorflowjs_converter \
+--input_format=tf_frozen_model \
+--output_format=tfjs_graph_model \
+--output_node_names='model/Sigmoid' \
+./msd-musicnn-1/msd-musicnn-1.pb \
+./msd-musicnn-1/tfjs

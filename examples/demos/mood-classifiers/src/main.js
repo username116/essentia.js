@@ -9,7 +9,7 @@ let essentia = null;
 let essentiaAnalysis;
 let featureExtractionWorker = null;
 let inferenceWorkers = {};
-const modelNames = ['mood_happy' , 'mood_sad', 'mood_relaxed', 'mood_aggressive', 'danceability', 'gender', 'genre_dortmund', 'genre_rosamerica', 'genre_tzanetakis', 'mood_acoustic', 'mood_party', 'tonal_atonal', 'voice_instrumental'];
+const modelNames = ['mood_happy' , 'mood_sad', 'mood_relaxed', 'mood_aggressive', 'danceability', 'gender', 'genre_dortmund', 'genre_rosamerica', 'genre_tzanetakis', 'mood_acoustic', 'mood_party', 'tonal_atonal', 'voice_instrumental'];   // 'msd-musicnn-1'
 let inferenceResultPromises = [];
 
 const resultsViz = new AnalysisResults(modelNames);
